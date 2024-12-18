@@ -69,7 +69,7 @@ function job_import() {
                 'added_date'  => $job['jobAddedDate'],
                 'job_link'    => esc_url($job['link']),
             ],
-        ];
+        ]; 
 
         //Check if the post exists and update it if it does otherwise insert it
 
