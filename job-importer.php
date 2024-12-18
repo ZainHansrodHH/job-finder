@@ -29,6 +29,7 @@ function job_import() {
     $existing_jobs = get_posts([
         'post_type' => 'posts',
         'numberposts' => -1,
+        'fields' => 'ids',
     ]);
 
     $fetched_ids = [];
@@ -42,7 +43,7 @@ function job_import() {
         }
 
         $list_id = $job['itemId'];
-        $fetched_ids[] = $list_id
+        $fetched_ids[] = $list_id;
 
         //Check if a post exists already
         $existing_post_id = array_search($list_id, $existing_jobs);
@@ -63,6 +64,23 @@ function job_import() {
                 'job_link'    => esc_url($job['link']),
             ],
         ];
+
+        //Check if the post exists and update it if it does otherwise insert it
+
+        if($existing_post_id) {
+            $post_data['ID'] = $existing_post_id;
+            wp_update_post($post_data);
+        } else {
+            wp_insert_post($post_data);
+        }
+
+        //Delete jobs that have not been returned in the api call (meaning they don't exist anymore)
+
+        foreach($existing_jobs as $post_id => $existing_job) {
+            if(!in_array($existing_job, $fetched_ids)) {
+                wp_delete_post($post_id, true);
+            }
+        }
 
         
     }
