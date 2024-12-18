@@ -94,3 +94,15 @@ function job_importer_menu() {
 
 add_action('admin_menu', 'job_importer_menu');
 
+//Create the admin page content
+function job_importer_page() {
+    //Check if the form has been submitted
+    if (isset($_POST['run_import'])) {
+        import_jobs();
+        echo '<div class="updated"><p>Jobs imported successfully!</p></div>';
+    }
+
+    echo '<h1>Job Importer</h1>';
+    echo '<form method="post"><button name="run_import" class="button button-primary">Run Import</button></form>';
+}
+
