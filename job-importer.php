@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Job Importer
  * Description: Imports jobs from a JSON feed as WordPress posts.
- * Version: 1.0.0
+ * Version: 1.0.2
  * Author: Zain Hansrod
  * Text Domain: job-importer
  */
@@ -31,7 +31,7 @@ function job_import() {
 
     //Basic wp query for getting the existing jobs
     $existing_jobs = get_posts([
-        'post_type' => 'posts',
+        'post_type' => 'post',
         'numberposts' => -1,
         'fields' => 'ids',
     ]);
@@ -48,7 +48,7 @@ function job_import() {
             continue;
         }
 
-        $list_id = $job['itemId'];
+        $list_id = $job['nid'];
         $fetched_ids[] = $list_id;
 
         //Check if a post exists already
@@ -82,8 +82,11 @@ function job_import() {
 
         //Delete jobs that have not been returned in the api call (meaning they don't exist anymore)
 
+        error_log(print_r($existing_jobs, true));
+
         foreach($existing_jobs as $existing_job) {
-            if(!in_array($existing_job, $fetched_ids)) {
+            $metaId = get_post_meta($existing_job, 'nid', true);
+            if(!in_array($metaId, $fetched_ids)) {
                 wp_delete_post($existing_job, true);
             }
         }
