@@ -21,8 +21,8 @@ function job_import() {
 
 
     //Decode the json response
-    $jobs = json_decode(wp_remote_retrieve_body($response), true);
-
+    $jobsDecoded = json_decode(wp_remote_retrieve_body($response), true);
+    $jobs = $jobsDecoded['nodes'];
 
 
     //Basic wp query for getting the existing jobs
