@@ -19,10 +19,14 @@ function job_import() {
     $api  = 'https://www.lifemark.ca/api/json/adp-jobs';
     $response = wp_remote_get($api);
 
+    //TODO: I would add more error handling here to check if the response is valid and if the api is up
+
 
     //Decode the json response
     $jobsDecoded = json_decode(wp_remote_retrieve_body($response), true);
     $jobs = $jobsDecoded['nodes'];
+
+    //TODO: I would add more error handling here to check the structure of the JSON and ensure it has the fields we are looking for and also is valid
 
 
     //Basic wp query for getting the existing jobs
@@ -31,6 +35,8 @@ function job_import() {
         'numberposts' => -1,
         'fields' => 'ids',
     ]);
+
+    //TODO: I would add error handling here to check the results of the posts returend from the query 
 
     $fetched_ids = [];
 
@@ -50,7 +56,7 @@ function job_import() {
 
         //Build out the post data we want to insert or update. We add all the metadat associatd with it too. We set the item_id so that we can cross reference them when checking if they exists when the job runs again 
 
-        //TODO: I would sanitize and check these fields before inserting them
+        //TODO: I would sanitize and check these fields before inserting them and also check each field before inserting it to ensure it is in the right format and also is valid
 
         $post_data = [
             'post_title' => $job['jobTitle'],
@@ -98,7 +104,7 @@ add_action('admin_menu', 'job_importer_menu');
 function job_importer_page() {
     //Check if the form has been submitted
     if (isset($_POST['run_import'])) {
-        import_jobs();
+        job_import();
         echo '<div class="updated"><p>Jobs imported successfully!</p></div>';
     }
 
@@ -108,6 +114,7 @@ function job_importer_page() {
 
 
 //Schedule the job to run everyday
+//TODO: I would add more error handling here to check if the job is scheduled and ensure it is running correctly as well as ensuring the schedule is running
 
 if (!wp_next_scheduled('daily_job_import')) {
     wp_schedule_event(time(), 'daily', 'daily_job_import');
