@@ -76,14 +76,21 @@ function job_import() {
 
         //Delete jobs that have not been returned in the api call (meaning they don't exist anymore)
 
-        foreach($existing_jobs as $post_id => $existing_job) {
+        foreach($existing_jobs as $existing_job) {
             if(!in_array($existing_job, $fetched_ids)) {
-                wp_delete_post($post_id, true);
+                wp_delete_post($existing_job, true);
             }
         }
 
         
     }
-
-
 }
+
+//Create the admin page 
+
+function job_importer_menu() {
+    add_menu_page('Job Importer', 'Job Importer', 'manage_options', 'job-importer', 'job_importer_page', 'dashicons-download', 6);
+}
+
+add_action('admin_menu', 'job_importer_menu');
+
