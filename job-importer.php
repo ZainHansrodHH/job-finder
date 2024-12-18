@@ -41,10 +41,27 @@ function job_import() {
             continue;
         }
 
-        $fetched_ids[] = $job['jobId'];
+        $fetched_ids[] = $job['itemId'];
 
         //Check if a post exists already
-        $existing_post_id = array_search($job['id'], $existing_jobs);
+        $existing_post_id = array_search($job['itemId'], $existing_jobs);
+
+        //Build out the post data we want to insert or update. We add all the metadat associatd with it too. We set the item_id so that we can cross reference them when checking if they exists when the job runs again 
+
+        //TODO: I would sanitize and check these fields before inserting them
+
+        $post_data = [
+            'post_title' => $job['jobTitle'],
+            'post_content' => $job['link'],
+            'post_type' => 'post',
+            'post_status'  => 'publish',
+            'meta_input'   => [
+                'item_id'     => $job['itemId'],
+                'job_city'    => $job['jobCity'],
+                'added_date'  => $job['jobAddedDate'],
+                'job_link'    => esc_url($job['link']),
+            ],
+        ];
 
         
     }
