@@ -106,3 +106,11 @@ function job_importer_page() {
     echo '<form method="post"><button name="run_import" class="button button-primary">Run Import</button></form>';
 }
 
+
+//Schedule the job to run everyday
+
+if (!wp_next_scheduled('daily_job_import')) {
+    wp_schedule_event(time(), 'daily', 'daily_job_import');
+}
+
+add_action('daily_job_import', 'job_import');
