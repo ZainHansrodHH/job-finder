@@ -114,3 +114,8 @@ if (!wp_next_scheduled('daily_job_import')) {
 }
 
 add_action('daily_job_import', 'job_import');
+
+//Clear the job when the plugin is deactivated
+register_deactivation_hook(__FILE__, function() {
+    wp_clear_scheduled_hook('daily_job_import');
+});
