@@ -37,16 +37,16 @@ function job_import() {
     foreach($jobs as $job) {
 
         //Limit the results to only the english ones
-        if($job['lang'] !== 'en_CA') {
+        if($job['langCode'] !== 'en_CA') {
             continue;
         }
 
-        $fetched_ids[] = $job['id'];
+        $fetched_ids[] = $job['jobId'];
 
         //Check if a post exists already
         $existing_post_id = array_search($job['id'], $existing_jobs);
 
-    
+        
     }
 
 
