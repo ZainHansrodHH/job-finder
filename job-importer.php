@@ -60,7 +60,7 @@ function job_import() {
 
         $post_data = [
             'post_title' => $job['jobTitle'],
-            'post_content' => $job['link'],
+            'post_content' => 'Link: ' . $job['link'] . ' City:' . $job['jobCity'] . ' Added Date:' . $job['jobAddedDate'],
             'post_type' => 'post',
             'post_status'  => 'publish',
             'meta_input'   => [
